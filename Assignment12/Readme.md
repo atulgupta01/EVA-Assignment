@@ -2,8 +2,8 @@ tf.enable_eager_execution() - using eager execution code can be executed without
 
 init_pytorch - the function is used for initializing the parameter values. Below is given the logic for initialization
 Input Parameters - 
-Shape = size of the input tensor i.e. [2,2] represents there are 2 rows and 2 columns
-Data Type = default value is float but this is the data type for the the random initialization
+1. Shape = size of the input tensor i.e. [2,2] represents there are 2 rows and 2 columns
+2. Data Type = default value is float but this is the data type for the the random initialization
 
 1. Calculate the product of all the values except the last element of the shape variable - the value is called fan. i.e. if the shape is [3,3], fan will be 3 
 2. Take square root of the value calculated in step one and divide one by this new value - the value is called bound. i.e. as per step 1, bound will be 1/(3*3)
@@ -20,8 +20,8 @@ class ConvBN - The class is used to initialize the layes for the DNN
 	d) Relu
 	
 class ResBlk - The class creates a block for the resnet using a parameter res
-In case res = False, it adds Maxpool layer to ConvBN set of layers and returns it.
-In case res = True, it adds additional two ConvBN set of layers to last layer (which has maxpool on ConvBN set of layers). In this case before returning it, adds last layer output to new layer output, making it a skip connection.
+1. In case res = False, it adds Maxpool layer to ConvBN set of layers and returns it.
+2. In case res = True, it adds additional two ConvBN set of layers to last layer (which has maxpool on ConvBN set of layers). In this case before returning it, adds last layer output to new layer output, making it a skip connection.
 
 class DavidNet - It add multiple ConvBN Layers and ResBlk Blocks in following order
 1. Add a ConvBN with the defined kernels e.g. number of kernels (c)  = 64 for assuming
