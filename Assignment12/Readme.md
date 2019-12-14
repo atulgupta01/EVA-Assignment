@@ -14,10 +14,10 @@ class ConvBN - The class is used to initialize the layes for the DNN
 2. Add Batch Normalization layer (with momentum and epsilon)
 3. Add dropout layer with 5% dropout
 4. Sequence layers in following order
-	a. Convolution Layer
-	b. dropout
-	c. Batch Normalization
-	d. Relu
+	a) Convolution Layer
+	b) dropout
+	c) Batch Normalization
+	d) Relu
 	
 class ResBlk - The class creates a block for the resnet using a parameter res
 In case res = False, it adds Maxpool layer to ConvBN set of layers and returns it.
