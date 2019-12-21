@@ -10,11 +10,11 @@ In this model resnet 18 architecture is followed with small deviations from sugg
 
 Please see below the Arch. 
 
-Convblk1 --> Block1 --> Block2 --> Block3 --> Block4 --> Global Average Pooling --> Dense Layer --> Softmax
+ConvBLK --> Block1 --> Block2 --> Block3 --> Block4 --> Global Average Pooling --> Dense Layer --> Softmax
 
-Convblk1 = Conv --> Batch Normalization --> Relu
+ConvBLK = Conv --> Batch Normalization --> Relu
 
-Each Block = Convblk1 --> Conv --> Batch Normalization --> Add(Input) --> Relu --> Convblk1 --> Conv --> Batch Normalization --> Add(Input) --> Relu
+Each Block = ConvBLK --> Conv --> Batch Normalization --> Add(Input) --> Relu --> ConvBLK --> Conv --> Batch Normalization --> Add(Input) --> Relu
 
 Conv 1 and Block1 - 64 Channels
 Block 2 - 128 Channels
@@ -30,11 +30,11 @@ In this model resnet 18 architecture is followed with more deviations from sugge
 
 Please see below the Arch. 
 
-Convblk1 --> Block1 --> Block2 --> Block3 --> Block4 --> Block5 --> Block6 --> Block7 --> Block8 -->Global Average Pooling --> Dense Layer --> Softmax
+ConvBLK --> Block1 --> Block2 --> Block3 --> Block4 --> Block5 --> Block6 --> Block7 --> Block8 -->Global Average Pooling --> Dense Layer --> Softmax
 
-Convblk1 = Conv --> Batch Normalization --> Relu --> dropout
+ConvBLK = Conv --> Batch Normalization --> Relu --> dropout
 
-Each Block = Convblk1 --> Convblk1 --> Add(Input)
+Each Block = ConvBLK --> ConvBLK --> Add(Input)
 
 Conv 1, Block1 and Block2 - 64 Channels
 Block 3, Block4 - 128 Channels
