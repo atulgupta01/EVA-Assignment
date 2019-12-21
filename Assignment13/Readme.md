@@ -2,7 +2,7 @@ In the given folder, 2 jupiter notebooks are submitted.
 1. Assignment_13_resnet
 2. Assignment_13_custom
 
-The different and implementation for both have been explained below
+The difference in the implementation for both have been explained below
 
 **Assignment_13_resnet**
 
