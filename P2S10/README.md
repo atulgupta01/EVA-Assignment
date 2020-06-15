@@ -8,7 +8,7 @@ You Tube Link
 
 https://youtu.be/MTY2TE-1qoU
 
-***The assignment has following files***
+**The assignment has following files**
 
 >**ai.py** - It has replay buffer class, actor class, critic class and TD3 class
 
@@ -18,7 +18,7 @@ https://youtu.be/MTY2TE-1qoU
 
 >**inference.py** - This file is used for testing/inference of the model.
 
-****Challenges Faced during the process****
+**Challenges Faced during the process**
 
 >1. It required proper thought process to setup the environment. However, I did setup only the bare minimum skelton of the environment. Some of the functionality in AI Gym environment are not made available i.e. providing action space etc.
 
@@ -31,7 +31,7 @@ This helped in removing the overfitting in the environment
 
 >5. Faced mutiple problems and similar problems were faced by people in the group. Some of the problems were more of carelessness i.e. in step 5 I passed current state instead of next state. It took 3-4 days to figure out the issue and resolve it.
 
-Current Status
+**Current Status**
 
 >1. Trained with the fixed 3 points and was able to get almost 90% level of success
 >2. Trained with 3 randomly moving points and was able to get 70% some level of success
@@ -44,7 +44,7 @@ What can be done to improve
 >3. Currently variable _max_episode_steps is setup as 500. Try reducing the value to 400 avoid overfitting.
 >4. Try rotating the state image similar to Gaurav Patel's model and see if that helps
 
-Expectation from Evaluation
+**Expectation from Evaluation**
 
 >1. It will be a huge help if you can please point my mistakes during evaluation. I would like to continue working on this even after submitting the assignment. So, any guidance will be really helpful.
 
