@@ -7,6 +7,8 @@ Created on Wed May 27 21:45:37 2020
 @author: AtulHome
 """
 
+# Import the required packages
+
 import numpy as np
 #import matplotlib.pyplot as plt
 import torch
@@ -17,7 +19,7 @@ from torch.optim.lr_scheduler import StepLR
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Step 1: Initialize the Experience Replay memory
-# state[i] = [cropped image state] + [distance to target state]
+# state[i] = [cropped image state] + [distance to target state, -orientation, orientation]
 
 class ReplayBuffer(object):
 
@@ -324,7 +326,6 @@ class TD3(object):
         state_val = np.expand_dims(state_val,0)
         state_val = torch.Tensor(state_val.reshape(1, -1)).to(device)
         state_img = torch.Tensor(state_img).to(device)
-        #self.actor.eval()
         action = self.actor(state_img, state_val).cpu().data.numpy().flatten()
         return action
 

@@ -4,7 +4,10 @@ Created on Sat Jun  6 21:46:16 2020
 
 @author: AtulHome
 """
+# This file is used for the testing of the model. The model i trained in Colab
+# but tested locally with this file
 
+# Import the required packages
 import torch
 #import torch.nn as nn
 #import torch.nn.functional as F
@@ -16,6 +19,7 @@ import ai, map
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+# Take the image of Car, City and City Mask
 car_file = './images/car.jpg'
 city_file = './images/citymap.png'
 city_map_file = "./images/MASK1.png"
@@ -24,12 +28,14 @@ car1 = map.car(0,0,0)
 city1 = map.city(city_file)
 citymap1 = map.city(city_map_file)
 
+# Create environment object
 env = map.env(car1, city1, citymap1, car_img) # Instantiate the environment
 seed = 8 # Random seed number
 save_models = True # Boolean checker whether or not to save the pre-trained model
 
+#Define the file name for the model to be tested
 file_name = "%s_%s" % ("TD3_car", str(seed))
-file_name = file_name + "_80556"
+file_name = file_name + "_31673"
 print ("---------------------------------------")
 print ("Settings: %s" % (file_name))
 print ("---------------------------------------")
@@ -44,16 +50,14 @@ state_dim = env.state_dim
 action_dim = env.action_dim
 max_action = env.max_action
 
-max_episode_steps = env._max_episode_steps
-
-
 torch.manual_seed(seed)
 np.random.seed(seed)
 
+# Create Policy
 policy = ai.TD3(state_dim, action_dim, max_action)
 replay_buffer = ai.ReplayBuffer()
-#evaluations = [evaluate_policy(policy)]
 
+#Load the model
 policy.load(file_name, './pytorch_models/')
 
 obs = env.reset()
@@ -63,20 +67,15 @@ for i in range(50000):
       
     action = policy.select_action(obs)
     new_obs,reward,done = env.step(action)
-    #print('action: ',action,type(action))
-    #print('Reward: ', reward)
-    #print('stateValue: ',new_obs[1:])
     new_city = env.show_image()
     cv.namedWindow('EndGame', cv.WINDOW_AUTOSIZE) #WINDOW_AUTOSIZE
     cv.imshow("EndGame",new_city.city_img)
-    #cv.namedWindow('state0') #WINDOW_AUTOSIZE
-    #cv.imshow("state0",obs[0].squeeze())
     if done: 
         obs =env.reset()
     else:
         obs = new_obs
         
-    if cv.waitKey(5) == 27:    # delay of 5 ms or exit loop on 'esc' key press
+    if cv.waitKey(25) == 27:    # delay of 5 ms or exit loop on 'esc' key press
         break
 
 cv.destroyAllWindows()

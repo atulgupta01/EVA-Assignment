@@ -7,12 +7,15 @@ Created on Wed May 27 21:40:40 2020
 @author: AtulHome
 """
 
+# This file is to create the environment for the ENDGAME assignment
+
+#Import the required packages
 import cv2 as cv
-#from google.colab.patches import cv2_imshow
 import copy
 import numpy as np
 import math
 
+# Function to rotate an image by an angle. The function is used to rotate car
 def rotate_image(image,rotation):
     height,width = image.shape[:2]
     
@@ -30,6 +33,8 @@ def rotate_image(image,rotation):
 
     return cv.warpAffine(image, rot_mat, (new_Width, new_Height))
 
+# Definition of CAR class and have function to move car by certain distance and
+# at certain angle
 class car(object):
 
   # x and y are center points of the car
@@ -45,6 +50,7 @@ class car(object):
         (self.length, self.width) = (int(20), int(10))
         self.angle = angle
 
+    # function to move the car
     def move(
         self,
         velocity_x,
@@ -60,6 +66,7 @@ class car(object):
         elif self.angle < -360:
             self.angle = self.angle % 360
 
+# Define class for the city class. The class has function to return the state 
 
 class city(object):
 
@@ -68,6 +75,7 @@ class city(object):
         self.city_img = cv.imread(self.city_file)
         (self.width, self.length, _) = self.city_img.shape
 
+    # Function to draw a dummy arraw on the state to showcase the car for training of model.
     def draw_car(
         self,
         x,
@@ -94,14 +102,14 @@ class city(object):
         line_color = (200, 200, 200)
         line_thickness = 4
 
-    # print(pt0, pt1, pt2, pt3, pt4)
-
         cv.line(img, pt2, pt3, line_color, line_thickness)
         cv.line(img, pt3, pt5, line_color, line_thickness)
         cv.line(img, pt6, pt2, line_color, line_thickness)
         cv.line(img, pt5, pt4, line_color, line_thickness)
         cv.line(img, pt6, pt4, line_color, line_thickness)
-
+    
+    # Function to return the current state of the location. 
+    # The state is taken as (1*40*40) array with the values normalized between 0 and 1
     def get_current_loc_map(
         self,
         x,
@@ -138,7 +146,11 @@ class city(object):
         
         return img_crop, img_state
 
-
+# Define the environment class. The class has functions to reset the environment,
+# take a step provide random action space and reset the goal. Also, the environment 
+# class has function to provide the current image of the city 
+# based on current location of the car.
+ 
 class env(object):
 
     def __init__(
@@ -170,6 +182,8 @@ class env(object):
         self.action_dim = 1
 
     # car_x and car_y are center points of the car
+    # Function to return the city Object with car drawn on it at current location
+    # This function is used for the inference and testing
 
     def show_image(self):
         newcity = copy.deepcopy(self.city)
@@ -195,28 +209,23 @@ class env(object):
         newcity.city_img = cv.circle(newcity.city_img, (self.goal_x, newcity.width - self.goal_y), 5, (0,0,255), -1)
         
         return newcity
-
+    
+    # Function to move the car by a step
     def step(self, action):
         self.reward = 0
         done = False
         distance = 0
         wall_penalty = 12
 
-        #new_action = self.car.angle + action
-        
+        # Calculate velocity to move the car
         angle = math.radians(self.car.angle)
         self.velocity_x = (self.refVelX * math.cos(angle)) - (self.refVelY * math.sin(angle))
         self.velocity_y = (self.refVelY * math.cos(angle)) + (self.refVelX * math.sin(angle))
         self.car.move(self.velocity_x, self.velocity_y, action)
         
-        #if self.car.x - self.car.length / 2 < 25 or self.car.y \
-        #    - self.car.width / 2 < 10 or self.car.x \
-        #    + self.car.length / 2 > self.city_map.length - 10 \
-        #    or self.car.y + (self.car.width / 2) > self.city_map.width \
-        #    - 10:
-        #    self.boundary_hit_count = self.boundary_hit_count + 1
-        #    self.reward = self.reward - 10.0
-            
+        # Handling of the boundary conditions. The car size if 40*20 and to avoid the 
+        # issues in drawing of the car as well as returning the current state, the limit
+        # is set to 25 pixels from the wall in all the directions
         if self.car.x < 25:
             self.car.x = 25
             self.boundary_hit_count = self.boundary_hit_count + 1
@@ -234,7 +243,7 @@ class env(object):
             self.boundary_hit_count = self.boundary_hit_count + 1
             self.reward = self.reward - wall_penalty
     
-        
+        # Calculate orientation of the car. Code taken from assignment 7
         xx = self.goal_x - self.car.x
         yy = self.goal_y - self.car.y
         
@@ -244,10 +253,13 @@ class env(object):
         
         orientation /= 180
 
+        #calculate distance between the current location of car and goal
         distance = np.sqrt((self.car.x - self.goal_x) ** 2 + (self.car.y - self.goal_y) ** 2)
         
+        #get current state of the car
         car_loc, img_state = self.city_map.get_current_loc_map(self.car.x, self.car.y, self.size, self.car.angle, state=True)
         
+        # Check if the car is on the sand and provide rewards accordingly
         sand_check = np.sum(self.city_map.city_img[int(self.city.width
                             - self.car.y), int(self.car.x)]) / (255 * 3)
         
@@ -262,7 +274,8 @@ class env(object):
                 self.reward = self.reward - 1.5
             self.on_road_count = self.on_road_count + 1
             self.episode_onroad = self.episode_onroad + 1
-    
+            
+        # Check if the goal has been hit    
         if distance < 25:
             self.reward = self.reward + 50
             self.goal_hit_count += 1
@@ -274,39 +287,37 @@ class env(object):
             self.on_road_count = 0
             self.off_road_count = 0
             
-     
+        # Check if boundary has been hit repeatedly. End the episode in that case
         if (self.boundary_hit_count == 50):
             done = True
             print ("Step Function :: Boundary hit {} times at location::{:.2f}::{:.2f} On Road Steps Percentage: {:.2f}".format(self.boundary_hit_count, self.car.x, self.car.y, (self.on_road_count*100/(self.current_step+1))))
-            #temp_distance = (distance - self.last_boundary_distance)**2 
-            #if ( temp_distance > 0 and temp_distance < 625):
-            #self.reset_goal()
             
             self.last_boundary_distance = distance
             
-            
+        # If the car is rotating continuously without hitting the goal, end the episide   
         if (self.current_step > self.step_limit) :
             done = True
-            #self.reset_goal()
             print ("Step Function :: Completed steps limit at location::{:.2f}::{:.2f} On Road Steps Percentage: {:.2f}".format(self.car.x, self.car.y, (self.on_road_count*100/(self.current_step+1))))
         
-        if (self.goal_hit_count >= 3):
+        # Celebrate if car has hit all the goals
+        if (self.goal_hit_count >= 4):
             print("*********** Hurray  {} Goals Hit *************".format(self.goal_hit_count))
             done = True
             self.last_boundary_distance = 0
             
-        
+
         self.current_step += 1
         self.last_action = action
         self.last_reward = self.reward
         self.last_distance = distance
         distance = distance/self.distance_normalize_factor
         
-    
+        # Concatenate all the components of the state and return as list item
         state = [img_state, distance, -orientation, orientation]
         
         return state, self.reward, done
-
+    
+    # Reset the environment
     def reset(self):
 
         self.on_road_count = 0
@@ -329,10 +340,11 @@ class env(object):
         
         return state
     
+    # reset the goal    
     def reset_goal(self):
         
-        #goal_loc = np.array([[1070, 600], [875,480],[950, 100], [600, 100],[460, 595],[280,100]])
-        goal_loc = np.array([[940, 580], [1100, 200], [380, 220]])
+        #Three goals taken for the training purpose and those are rendered randomly
+        goal_loc = np.array([[940, 580], [1100, 200], [740, 60],[10,10]])
         next_goal_pos = int(np.random.randint(0,(len(goal_loc))))
         self.goal_x, self.goal_y = goal_loc[next_goal_pos, :]
         while (self.swap == next_goal_pos):
@@ -342,7 +354,7 @@ class env(object):
         self.swap = next_goal_pos
         print("####Goal {} Reset to {}::{}####".format(self.goal_hit_count, self.goal_x, self.goal_y))
         
-    
+    # Return sample action randomly between the defines limits
     def sample_action(self):
         return int(np.random.randint(-self.max_action, self.max_action))
         
