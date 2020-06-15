@@ -36,5 +36,15 @@ Current Status
 
 What can be done to improve
 
-1. Change the reward system to improve the on road percentage of the car
-2. 
+1. Change the reward system to improve the on road percentage of the car.
+2. Add random rotation to state images - i feel my model is over fitting and this can reduce overfitting
+3. Currently variable _max_episode_steps is setup as 500. Try reducing the value to 400 avoid overfitting.
+4. Try rotating the state image similar to Gaurav Patel's model and see if that helps
+
+Expectation from Evaluation
+
+1. It will be a huge help if you can please point my mistakes during evaluation. I would like to continue working on this even after submitting the assignment. So, any guidance will be really helpful.
+
+2. At times, I felt running out of ideas to improve and any suggestion will be really welcome.
+
+3. Could we also get some more similar ideas where we can create environment and play for our learning. I shall be thankful if you can please point me to more such ideas.
