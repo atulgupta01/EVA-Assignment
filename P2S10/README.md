@@ -8,11 +8,14 @@ You Tube Link
 
 https://youtu.be/MTY2TE-1qoU
 
-The assignment has following files
+***The assignment has following files***
 
 >**ai.py** - It has replay buffer class, actor class, critic class and TD3 class
+
 >**map.py** - It has environment related details with CAR class, CITY class and environment class
+
 >**P2S10.ipynb** - This notebook is run on colab to train the model
+
 >**inference.py** - This file is used for testing/inference of the model.
 
 Challenges Faced during the process
