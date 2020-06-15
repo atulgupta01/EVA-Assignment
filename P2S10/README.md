@@ -1,4 +1,4 @@
-#Twin Delayed Deep Deterministic Gradient
+**Twin Delayed Deep Deterministic Gradient**
 
 Github Link for the code 
 
@@ -30,9 +30,9 @@ This helped in removing the overfitting in the environment
 
 Current Status
 
-1. Trained with the fixed 3 points and was able to get almost 90% level of success
-2. Trained with 3 randomly moving points and was able to get 70% some level of success
-3. Trained with 7 randomly moving points and success was not very good. The model was not able to learn very well.
+>1. Trained with the fixed 3 points and was able to get almost 90% level of success
+>2. Trained with 3 randomly moving points and was able to get 70% some level of success
+>3. Trained with 7 randomly moving points and success was not very good. The model was not able to learn very well.
 
 What can be done to improve
 
