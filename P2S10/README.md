@@ -18,7 +18,7 @@ https://youtu.be/MTY2TE-1qoU
 
 >**inference.py** - This file is used for testing/inference of the model.
 
-Challenges Faced during the process
+****Challenges Faced during the process****
 
 >1. It required proper thought process to setup the environment. However, I did setup only the bare minimum skelton of the environment. Some of the functionality in AI Gym environment are not made available i.e. providing action space etc.
 
